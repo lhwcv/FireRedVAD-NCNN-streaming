@@ -15,7 +15,7 @@ from pathlib import Path
 from collections import deque
 
 # 添加 FireRedVAD 路径
-FIREREDVAD_PATH = Path('/root/deploy/3rd/FireRedVAD')
+FIREREDVAD_PATH = Path('/root/.copaw/czur_doc_intelligence/deploy/3rd/FireRedVAD')
 sys.path.insert(0, str(FIREREDVAD_PATH))
 
 from fireredvad.stream_vad import FireRedStreamVad, FireRedStreamVadConfig

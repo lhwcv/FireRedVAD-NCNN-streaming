@@ -1,6 +1,7 @@
 #!/bin/bash
-# FireRedVAD NCNN 一键构建脚本
+# FireRedVAD NCNN Stream-VAD 一键构建脚本
 # 使用方法：./build.sh [clean|build|install|test|all]
+# 默认使用官方 Stream-VAD 模型（流式专用）
 
 set -e
 
@@ -53,7 +54,7 @@ clean() {
 }
 
 build() {
-    print_info "Building FireRedVAD NCNN..."
+    print_info "Building FireRedVAD NCNN (Stream-VAD model)..."
     
     if [ ! -d "$BUILD_DIR" ]; then
         mkdir -p "$BUILD_DIR"
@@ -70,8 +71,8 @@ build() {
     
     print_info "Build completed successfully!"
     print_info "Binaries: $BUILD_DIR/"
-    print_info "  - libfirered_vad_stream.so"
-    print_info "  - test_vad_stream"
+    print_info "  - libfirered_vad_stream.so (Stream-VAD C API)"
+    print_info "  - test_vad_stream (Stream-VAD test executable)"
 }
 
 install() {
@@ -108,11 +109,11 @@ test() {
         exit 1
     fi
     
-    # 查找模型文件
-    MODEL_PARAM="$SCRIPT_DIR/models/firered_vad_packed_cache.ncnn.param"
-    MODEL_BIN="$SCRIPT_DIR/models/firered_vad_packed_cache.ncnn.bin"
-    CMVN_MEANS="$SCRIPT_DIR/models/cmvn_means.bin"
-    CMVN_ISTD="$SCRIPT_DIR/models/cmvn_istd.bin"
+    # 查找模型文件（Stream-VAD 版本）
+    MODEL_PARAM="$SCRIPT_DIR/models/firered_vad_packed_cache_stream.ncnn.param"
+    MODEL_BIN="$SCRIPT_DIR/models/firered_vad_packed_cache_stream.ncnn.bin"
+    CMVN_MEANS="$SCRIPT_DIR/models/cmvn_means_stream.bin"
+    CMVN_ISTD="$SCRIPT_DIR/models/cmvn_istd_stream.bin"
     
     if [ ! -f "$MODEL_PARAM" ] || [ ! -f "$MODEL_BIN" ]; then
         print_error "Model files not found in $SCRIPT_DIR/models/"
@@ -124,7 +125,7 @@ test() {
     
     export LD_LIBRARY_PATH="$NCNN_ROOT/build/src:$LD_LIBRARY_PATH"
     
-    print_info "Running test_vad_stream..."
+    print_info "Running test_vad_stream (Stream-VAD model)..."
     ./test_vad_stream \
         "$MODEL_PARAM" \
         "$MODEL_BIN" \

@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 project(firered_vad VERSION 1.0.0 LANGUAGES CXX)
 
+# FireRedVAD NCNN Stream-VAD Deployment
+# Default model: Official Stream-VAD (streaming-specialized model)
+# Model files: models/firered_vad_packed_cache_stream.ncnn.*
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Release)
