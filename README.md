@@ -13,6 +13,7 @@ A clean and efficient FireRedVAD Voice Activity Detection (VAD) NCNN deployment 
 - ✅ **CMVN Normalization**: Consistent with Kaldi features
 - ✅ **C API**: Clean C interface, easy to integrate
 - ✅ **High Accuracy**: Difference from PyTorch < 0.003 (NCNN Python)
+- TODO: implement post filter [stream_vad_postprocessor](https://github.com/FireRedTeam/FireRedVAD/blob/main/fireredvad/core/stream_vad_postprocessor.py)
 
 ## Directory Structure
 

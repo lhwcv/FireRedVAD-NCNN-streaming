@@ -13,6 +13,7 @@
 - ✅ **CMVN 归一化**: 与 Kaldi 特征一致
 - ✅ **C API**: 简洁的 C 接口，易于集成
 - ✅ **高精度**: 与 PyTorch 原始模型差异 < 0.003
+- TODO: implement post filter [stream_vad_postprocessor](https://github.com/FireRedTeam/FireRedVAD/blob/main/fireredvad/core/stream_vad_postprocessor.py)
 
 ## 目录结构
 
