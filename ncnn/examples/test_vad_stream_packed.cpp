@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "firered_vad_stream_packed.h"
-#include "../frontend/wav.h"
+#include "../csrc/firered_vad_stream_packed.h"
+#include "frontend/wav.h"
 
 int main(int argc, char** argv) {
     if (argc < 6) {

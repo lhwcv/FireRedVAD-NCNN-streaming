@@ -20,7 +20,7 @@ import torch.nn as nn
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))+'/../../')
 from fireredvad.core.detect_model import DetectModel
 
 
@@ -59,7 +59,7 @@ def export_packed_cache_stream():
     """导出 Stream-VAD 打包 cache 的 ONNX 模型"""
     
     # 使用 Stream-VAD 模型目录
-    model_dir = 'pretrained_models/xukaituo/FireRedVAD/Stream-VAD'
+    model_dir = '../../pretrained_models/FireRedVAD/Stream-VAD'
     
     print(f"Loading Stream-VAD model from: {model_dir}")
     
@@ -83,11 +83,11 @@ def export_packed_cache_stream():
     
     # 导出 ONNX
     print(f"\nExporting ONNX model...")
-    
+    os.makedirs('out/', exist_ok=True)
     torch.onnx.export(
         model,
         (feat, caches_packed),
-        'firered_vad_packed_cache_stream.onnx',
+        'out/firered_vad_packed_cache_stream.onnx',
         input_names=['feat', 'caches_packed'],
         output_names=['probs', 'new_caches_packed'],
         opset_version=11,
@@ -101,7 +101,7 @@ def export_packed_cache_stream():
     import subprocess
     subprocess.run([
         'pnnx',
-        'firered_vad_packed_cache_stream.onnx',
+        'out/firered_vad_packed_cache_stream.onnx',
         'inputshape=[1,1,80],[1,1024,19]',
         'inputname=feat,caches_packed',
         'outputname=probs,new_caches_packed'
@@ -109,8 +109,18 @@ def export_packed_cache_stream():
     
     print(f"\nDone!")
     print(f"NCNN files:")
-    print(f"  - firered_vad_packed_cache_stream.ncnn.param")
-    print(f"  - firered_vad_packed_cache_stream.ncnn.bin")
+    print(f"  - out/firered_vad_packed_cache_stream.ncnn.param")
+    print(f"  - out/firered_vad_packed_cache_stream.ncnn.bin")
+
+    from fireredvad.core.audio_feat import CMVN
+
+    cmvn = CMVN('../../pretrained_models/FireRedVAD/Stream-VAD/cmvn.ark')
+    cmvn.means.astype(np.float32).tofile('./out/cmvn_means_stream.bin')
+    cmvn.inverse_std_variances.astype(np.float32).tofile('./out/cmvn_istd_stream.bin')
+
+    os.system('rm out/*.py')
+    os.system('rm out/*pnnx*')
+
 
 
 if __name__ == '__main__':

@@ -1,56 +1,36 @@
-# Model Conversion Scripts
+# Convert ONNX and ncnn models for runtime
 
-## Default: Stream-VAD Model (Recommended)
+Quick download converted models from: https://github.com/lhwcv/FireRedVAD-NCNN-streaming/tree/main/models
 
-**Use these scripts for Stream-VAD (official streaming-specialized model):**
 
+## Convert yourself
+
+Download models:
 ```bash
-# 1. Export ONNX with packed cache (Stream-VAD weights)
-python3 export_ncnn_packed_cache_stream.py
 
-# 2. Convert to NCNN using PNNX
-pnnx firered_vad_packed_cache_stream.onnx inputshape=[1,1,80]
-
-# 3. Move model files to models/
-mv firered_vad_packed_cache_stream.ncnn.param ../models/
-mv firered_vad_packed_cache_stream.ncnn.bin ../models/
+cd ~/FireRedVAD # FireRedVAD repo root dir
+ 
+huggingface-cli download FireRedTeam/FireRedVAD --local-dir ./pretrained_models/FireRedVAD
+```
+Dependencies:
+```bash
+# requires-python = ">=3.10"
+# dependencies = [
+#     "fireredvad",
+#     "torch>=2.0.0",
+#     "onnx>=1.14.0",
+#     "onnxsim>=0.4.0",
+#     "onnxruntime",
+#     "huggingface_hub",
+#     "pnnx"
+# ]
 ```
 
-**Output files:**
-- `firered_vad_packed_cache_stream.onnx` - ONNX model
-- `firered_vad_packed_cache_stream.ncnn.param` - NCNN network structure
-- `firered_vad_packed_cache_stream.ncnn.bin` - NCNN weights (1.1MB)
 
-## Legacy: VAD Model (Not Recommended)
-
-The following scripts use the original VAD model (not Stream-VAD):
-
-- `export_ncnn_packed_cache.py` - Export VAD model (not Stream-VAD)
-- `firered_vad_packed_cache_ncnn.py` - Verify VAD model
-
-**Note:** These are kept for reference only. Use Stream-VAD scripts for new deployments.
-
-## CMVN Preparation
-
-After converting the model, prepare CMVN parameters:
-
+Then run the conversion scripts:
 ```bash
-# For Stream-VAD
-python3 -c "
-import numpy as np
-from fireredvad.core.audio_feat import CMVN
-
-cmvn = CMVN('../../3rd/FireRedVAD/pretrained_models/xukaituo/FireRedVAD/Stream-VAD/cmvn.ark')
-cmvn.means.astype(np.float32).tofile('../models/cmvn_means_stream.bin')
-cmvn.inverse_std_variances.astype(np.float32).tofile('../models/cmvn_istd_stream.bin')
-"
+cd ./runtime/convert/
+python export_packed_cache_stream_vad.py
+python export_non_stream_vad.py
+python export_aed.py
 ```
-
-## Model Comparison
-
-| Model | Use Case | Recommendation |
-|-------|----------|----------------|
-| **Stream-VAD** | Streaming inference | ✅ **Recommended** |
-| VAD (adapted) | Non-streaming or reference | ⚠️ Legacy |
-
-Stream-VAD is specifically trained for streaming inference and provides better accuracy for real-time applications.

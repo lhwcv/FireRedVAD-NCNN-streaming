@@ -1,5 +1,5 @@
 #include "firered_vad_stream_packed.h"
-#include "../frontend/fbank.h"
+#include "frontend/fbank.h"
 #include "net.h"
 #include <cstring>
 #include <cstdio>

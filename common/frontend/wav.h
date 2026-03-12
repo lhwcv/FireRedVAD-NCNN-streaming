@@ -56,9 +56,21 @@ class WavReader {
     
     // Skip any sub-chunks between "fmt" and "data"
     while (0 != strncmp(header.data, "data", 4)) {
-      fseek(fp, header.data_size, SEEK_CUR);
-      if (fread(header.data, 8, sizeof(char), fp) != 8) {
+      // skip current chunk payload
+      if (fseek(fp, header.data_size, SEEK_CUR) != 0) {
+        fprintf(stderr, "Failed to seek over chunk\n");
+        fclose(fp);
+        return false;
+      }
+      // read next chunk id (4 bytes)
+      if (fread(header.data, 1, 4, fp) != 4) {
         fprintf(stderr, "Failed to find data chunk\n");
+        fclose(fp);
+        return false;
+      }
+      // read next chunk size (4 bytes)
+      if (fread(&header.data_size, 1, 4, fp) != 4) {
+        fprintf(stderr, "Failed to read next chunk size\n");
         fclose(fp);
         return false;
       }
