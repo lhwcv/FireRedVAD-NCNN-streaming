@@ -1,4 +1,4 @@
-# FireRedVAD NCNN Deployment Module (Stream-VAD)
+# FireRedVAD NCNN  (Stream-VAD)
 
 ### ✅ NCNN models download here: [Download Models](convert/out) <br/>
 
