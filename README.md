@@ -2,7 +2,7 @@
 
 ### ✅ NCNN models download here: [Download Models](convert/out) <br/>
 
-Now this project has moved into origin repo  as Runtime: https://github.com/FireRedTeam/FireRedVAD/runtime/
+Now this project has moved into origin repo  as Runtime: https://github.com/FireRedTeam/FireRedVAD/tree/main/runtime
 
 ==========
 
